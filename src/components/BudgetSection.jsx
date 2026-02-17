@@ -63,7 +63,7 @@ export default function BudgetSection({
       />
       <div className="mt-4 space-y-4">
         {categories.map((item) => {
-          const budgeted = Number(activeBudgetMap[item.id]) || 0
+          const budgeted = Number(inputValues[item.id]) || 0
           const spent = spentByCategory.get(item.id) || 0
           const percent = budgeted
             ? Math.round((spent / budgeted) * 100)

@@ -63,6 +63,7 @@ export default function PlanningCostSection({
   categories = [],
   accounts = [],
   activeCycleId,
+  viewMode = 'cycle',
   dispatch,
 }) {
   const activeCategories = categories.filter((category) => !category.disabled)
@@ -73,10 +74,14 @@ export default function PlanningCostSection({
     initialState
   )
 
+  const isAllView = viewMode === 'all'
+
   const items = useMemo(
     () =>
-      planningCosts.filter((cost) => cost.cycleId === activeCycleId),
-    [planningCosts, activeCycleId]
+      isAllView
+        ? planningCosts
+        : planningCosts.filter((cost) => cost.cycleId === activeCycleId),
+    [planningCosts, activeCycleId, isAllView]
   )
 
   const categoryMap = useMemo(
@@ -139,7 +144,11 @@ export default function PlanningCostSection({
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <SectionHeader
         title="Planning Cost"
-        subtitle={`Monthly view · ${activeCycleId}`}
+        subtitle={
+          isAllView
+            ? 'All billing cycles · historical view'
+            : `Monthly view · ${activeCycleId}`
+        }
       />
 
       <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={handleAdd}>
@@ -249,7 +258,7 @@ export default function PlanningCostSection({
                   <p className="text-xs text-slate-500">
                     {formatCurrency(item.amount)} ·{' '}
                     {category?.name || 'Uncategorized'} · Every {item.billingDay}
-                    th
+                    th {isAllView ? `· Cycle ${item.cycleId}` : ''}
                   </p>
                 </div>
                 <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-semibold text-slate-600">
@@ -471,7 +480,9 @@ export default function PlanningCostSection({
         })}
         {items.length === 0 ? (
           <p className="text-xs text-slate-500">
-            No planned costs for this cycle yet.
+            {isAllView
+              ? 'No planning costs in history yet.'
+              : 'No planned costs for this cycle yet.'}
           </p>
         ) : null}
       </div>

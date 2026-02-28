@@ -1,13 +1,21 @@
 import { formatCurrency } from './format.js'
 
 const CASHFLOW_COLORS = [
-  '#f97316',
-  '#38bdf8',
-  '#22c55e',
-  '#eab308',
-  '#6366f1',
-  '#ec4899',
-  '#8b5cf6',
+  '#f97316', // orange
+  '#38bdf8', // sky
+  '#22c55e', // green
+  '#eab308', // yellow
+  '#6366f1', // indigo
+  '#ec4899', // pink
+  '#8b5cf6', // violet
+  '#f43f5e', // rose
+  '#14b8a6', // teal
+  '#f59e0b', // amber
+  '#84cc16', // lime
+  '#06b6d4', // cyan
+  '#a855f7', // purple
+  '#ef4444', // red
+  '#3b82f6', // blue
 ]
 
 export function buildAccountSummaries(accounts, transactions) {
@@ -64,7 +72,6 @@ export function buildCashFlow(transactions, categories) {
       color: CASHFLOW_COLORS[index % CASHFLOW_COLORS.length],
     }))
     .sort((a, b) => b.value - a.value)
-    .slice(0, 5)
 
   return { inflow, outflow, breakdown }
 }
@@ -157,8 +164,8 @@ export function buildKpis({
     },
     {
       label: 'Budget Left',
-      value: formatCurrency(Number(budgetTotal || 0) - Number(spentTotal || 0)),
-      note: 'Remaining before month end',
+      value: `${formatCurrency(spentTotal || 0)} / ${formatCurrency(budgetTotal || 0)}`,
+      note: 'Spent / Total Budget',
     },
   ]
 }

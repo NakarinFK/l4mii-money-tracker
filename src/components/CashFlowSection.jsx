@@ -20,7 +20,7 @@ export default function CashFlowSection({ inflow, outflow, breakdown }) {
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <SectionHeader
         title="Cash Flow"
-        subtitle="Month-to-date spending breakdown"
+        subtitle={`Month-to-date spending breakdown (${breakdown.length} categories)`}
       />
       <div className="mt-4 flex flex-wrap items-center gap-6">
         <div className="relative h-40 w-40 rounded-full" style={donutStyle}>
@@ -48,17 +48,17 @@ export default function CashFlowSection({ inflow, outflow, breakdown }) {
               <span>{formatCurrency(inflow - outflow)}</span>
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="max-h-48 overflow-y-auto space-y-2">
             {breakdown.map((item) => (
               <div key={item.label} className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span
-                    className="h-2 w-2 rounded-full"
+                    className="h-2 w-2 rounded-full flex-shrink-0"
                     style={{ backgroundColor: item.color }}
                   />
                   <span className="text-slate-600">{item.label}</span>
                 </div>
-                <span className="text-slate-900">
+                <span className="text-slate-900 font-medium">
                   {formatCurrency(item.value)}
                 </span>
               </div>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import KpiGrid from './KpiGrid.jsx'
 import { buildTransactionRows } from '../utils/financeSelectors.js'
+import { buildCycleOptions } from '../utils/cycle.js'
 import {
   persistenceAdapter,
   saveLayoutState,
@@ -23,8 +24,8 @@ export default function Dashboard({
   transactions,
   formAccounts,
   rawTransactions,
-  viewMode = 'cycle',
-  onToggleViewMode,
+  selectedCycleId = 'current',
+  onSelectCycle,
   dispatch,
   initialLayoutState,
 }) {
@@ -90,6 +91,14 @@ export default function Dashboard({
   }, [rawTransactions, formAccounts, categories, selectedAccountId])
 
   const visibleTransactions = selectedAccountId ? filteredRows : transactions
+
+  const cycleOptions = useMemo(() => {
+    const options = new Set(buildCycleOptions(activeCycleId, 6))
+    for (const item of [...(planningCosts || []), ...(rawTransactions || []), ...(budgets || [])]) {
+      if (item?.cycleId) options.add(item.cycleId)
+    }
+    return Array.from(options).sort((a, b) => b.localeCompare(a))
+  }, [activeCycleId, planningCosts, rawTransactions, budgets])
 
   const handleSubmit = (payload) => {
     if (editingTransaction) {
@@ -159,7 +168,7 @@ export default function Dashboard({
     categories,
     budgets,
     activeCycleId,
-    viewMode,
+    selectedCycleId,
     planningCosts,
     cashFlow,
     transactions,
@@ -294,13 +303,19 @@ export default function Dashboard({
           Money Trackers
         </h1>
         <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onToggleViewMode}
+          <select
+            value={selectedCycleId}
+            onChange={(event) => onSelectCycle?.(event.target.value)}
             className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm hover:text-slate-900"
           >
-            {viewMode === 'all' ? 'Back to Current Cycle' : 'Show All Cycles'}
-          </button>
+            <option value="current">Current Cycle ({activeCycleId})</option>
+            <option value="all">All Cycles</option>
+            {cycleOptions.map((cycleId) => (
+              <option key={cycleId} value={cycleId}>
+                Cycle {cycleId}
+              </option>
+            ))}
+          </select>
           <input
             ref={fileInputRef}
             type="file"

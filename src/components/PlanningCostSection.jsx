@@ -1,6 +1,7 @@
 import { useMemo, useReducer } from 'react'
 import SectionHeader from './SectionHeader.jsx'
 import { formatCurrency } from '../utils/format.js'
+import { resolveCycleId, formatCycleLabel } from '../utils/cycle.js'
 
 const createAddState = (categoryId) => ({
   name: '',
@@ -63,7 +64,7 @@ export default function PlanningCostSection({
   categories = [],
   accounts = [],
   activeCycleId,
-  viewMode = 'cycle',
+  selectedCycleId = 'current',
   dispatch,
 }) {
   const activeCategories = categories.filter((category) => !category.disabled)
@@ -74,14 +75,12 @@ export default function PlanningCostSection({
     initialState
   )
 
-  const isAllView = viewMode === 'all'
+  const { scopedCycleId, isAllView, matchesCycle } = resolveCycleId(selectedCycleId, activeCycleId)
 
   const items = useMemo(
     () =>
-      isAllView
-        ? planningCosts
-        : planningCosts.filter((cost) => cost.cycleId === activeCycleId),
-    [planningCosts, activeCycleId, isAllView]
+      planningCosts.filter((cost) => matchesCycle(cost.cycleId)),
+    [planningCosts, scopedCycleId, isAllView]
   )
 
   const categoryMap = useMemo(
@@ -147,7 +146,7 @@ export default function PlanningCostSection({
         subtitle={
           isAllView
             ? 'All billing cycles · historical view'
-            : `Monthly view · ${activeCycleId}`
+            : `Monthly view · ${formatCycleLabel(scopedCycleId)}`
         }
       />
 
@@ -258,7 +257,7 @@ export default function PlanningCostSection({
                   <p className="text-xs text-slate-500">
                     {formatCurrency(item.amount)} ·{' '}
                     {category?.name || 'Uncategorized'} · Every {item.billingDay}
-                    th {isAllView ? `· Cycle ${item.cycleId}` : ''}
+                    th {item.cycleId !== scopedCycleId ? `· Cycle ${item.cycleId}` : ''}
                   </p>
                 </div>
                 <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-semibold text-slate-600">

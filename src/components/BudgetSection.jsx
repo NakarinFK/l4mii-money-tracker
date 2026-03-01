@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import SectionHeader from './SectionHeader.jsx'
 import { formatCurrency } from '../utils/format.js'
+import { resolveCycleId, formatCycleLabel } from '../utils/cycle.js'
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useSortable } from '@dnd-kit/sortable'
@@ -19,7 +20,7 @@ function SortableBudgetItem({
   inputValues,
   setInputValues,
   dispatch,
-  activeCycleId,
+  budgetCycleId,
   toggleCategoryVisibility,
 }) {
   const {
@@ -79,7 +80,7 @@ function SortableBudgetItem({
                   dispatch({
                     type: 'UPDATE_BUDGET',
                     payload: {
-                      cycleId: activeCycleId,
+                      cycleId: budgetCycleId,
                       categoryId: item.id,
                       amount: value,
                     },
@@ -141,7 +142,7 @@ export default function BudgetSection({
   categories = [],
   budgets,
   activeCycleId,
-  viewMode = 'cycle',
+  selectedCycleId = 'current',
   transactions = [],
   dispatch,
 }) {
@@ -149,18 +150,23 @@ export default function BudgetSection({
   const [hiddenCategories, setHiddenCategories] = useState(new Set())
   const [sortableCategories, setSortableCategories] = useState([])
   const isInitialized = useRef(false)
+
+  const { scopedCycleId, isAllView } = resolveCycleId(selectedCycleId, activeCycleId)
+  const budgetCycleId = scopedCycleId || activeCycleId
   
   const { spentByCategory, monthLabel, activeBudgetMap } = useMemo(() => {
-    const label = formatCycleLabel(activeCycleId)
+    const label = isAllView
+      ? `All cycles (editing ${formatCycleLabel(activeCycleId)})`
+      : formatCycleLabel(budgetCycleId)
     const map = new Map()
     const activeProfile = (budgets || []).find(
-      (profile) => profile.cycleId === activeCycleId
+      (profile) => profile.cycleId === budgetCycleId
     )
     const budgetMap = activeProfile?.budgets || {}
 
     transactions.forEach((transaction) => {
       if (transaction.type !== 'expense') return
-      if (transaction.cycleId !== activeCycleId) return
+      if (transaction.cycleId !== budgetCycleId) return
       if (!transaction.categoryId) return
 
       const current = map.get(transaction.categoryId) || 0
@@ -172,20 +178,22 @@ export default function BudgetSection({
       monthLabel: label,
       activeBudgetMap: budgetMap,
     }
-  }, [transactions, budgets, activeCycleId])
+  }, [transactions, budgets, activeCycleId, budgetCycleId, isAllView])
 
-  // Initialize input values and sortable categories only on first mount
+  // Sync budget input values when categories or the viewed cycle changes; initialize sort order once
   useEffect(() => {
-    if (!isInitialized.current && categories.length > 0) {
+    if (categories.length > 0) {
       const newInputValues = {}
       categories.forEach((category) => {
         newInputValues[category.id] = String(Number(activeBudgetMap[category.id]) || 0)
       })
       setInputValues(newInputValues)
-      setSortableCategories(categories.map(cat => cat.id))
-      isInitialized.current = true
+      if (!isInitialized.current) {
+        setSortableCategories(categories.map(cat => cat.id))
+        isInitialized.current = true
+      }
     }
-  }, [categories])
+  }, [categories, activeBudgetMap, budgetCycleId])
 
   // DnD sensors
   const sensors = useSensors(
@@ -234,9 +242,9 @@ export default function BudgetSection({
         title="Budget Plan"
         subtitle={`Tracked by category · ${monthLabel}`}
       />
-      {viewMode === 'all' ? (
+      {isAllView ? (
         <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-          Historical view is enabled. Budget editing remains scoped to cycle {activeCycleId}.
+          You are viewing all cycles. Budget editing remains scoped to current cycle {activeCycleId}.
         </p>
       ) : null}
       <DndContext
@@ -254,7 +262,7 @@ export default function BudgetSection({
                 inputValues={inputValues}
                 setInputValues={setInputValues}
                 dispatch={dispatch}
-                activeCycleId={activeCycleId}
+                budgetCycleId={budgetCycleId}
                 toggleCategoryVisibility={toggleCategoryVisibility}
               />
             ))}
@@ -276,10 +284,3 @@ export default function BudgetSection({
   )
 }
 
-function formatCycleLabel(cycleId) {
-  if (!cycleId) return 'Current Month'
-  const [year, month] = cycleId.split('-').map(Number)
-  if (!year || !month) return cycleId
-  const date = new Date(year, month - 1, 1)
-  return date.toLocaleString('en-US', { month: 'long', year: 'numeric' })
-}

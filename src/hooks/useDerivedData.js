@@ -5,8 +5,9 @@ import {
   buildKpis,
   buildTransactionRows,
 } from '../utils/financeSelectors.js'
+import { resolveCycleId } from '../utils/cycle.js'
 
-export function useDerivedData(state, activeCycleId, viewMode = 'cycle') {
+export function useDerivedData(state, activeCycleId, selectedCycleId = 'current') {
   return useMemo(() => {
     // Early return if state is empty or accounts is not an array
     if (!state || !Array.isArray(state.accounts)) {
@@ -23,11 +24,11 @@ export function useDerivedData(state, activeCycleId, viewMode = 'cycle') {
     }
 
     const budgets = state.budgets || []
-    const isAllView = viewMode === 'all'
+    const { scopedCycleId, isAllView, matchesCycle } = resolveCycleId(selectedCycleId, activeCycleId)
 
-    const activeProfile = budgets.find(
-      (profile) => profile.cycleId === activeCycleId
-    )
+    const activeProfile = scopedCycleId
+      ? budgets.find((profile) => profile.cycleId === scopedCycleId)
+      : null
     const activeBudgetMap = activeProfile?.budgets || {}
 
     // Memoize expensive calculations
@@ -35,7 +36,7 @@ export function useDerivedData(state, activeCycleId, viewMode = 'cycle') {
       .filter(
         (cost) =>
           cost.status === 'planned' &&
-          (isAllView || cost.cycleId === activeCycleId)
+          matchesCycle(cost.cycleId)
       )
       .reduce((sum, cost) => sum + Number(cost.amount || 0), 0)
 
@@ -43,7 +44,7 @@ export function useDerivedData(state, activeCycleId, viewMode = 'cycle') {
       .filter(
         (transaction) =>
           transaction.type === 'expense' &&
-          (isAllView || transaction.cycleId === activeCycleId)
+          matchesCycle(transaction.cycleId)
       )
       .reduce((sum, transaction) => sum + Number(transaction.amount || 0), 0)
 
@@ -63,16 +64,21 @@ export function useDerivedData(state, activeCycleId, viewMode = 'cycle') {
         )
 
     // Build derived data only when needed
+    const scopedTransactions = isAllView
+      ? state.transactions || []
+      : (state.transactions || []).filter((transaction) =>
+          matchesCycle(transaction.cycleId)
+        )
     const accounts = buildAccountSummaries(state.accounts || [], state.transactions || [])
     const transactions = buildTransactionRows(
-      state.transactions || [],
+      scopedTransactions,
       state.accounts || [],
       state.categories || []
     )
-    const cashFlow = buildCashFlow(state.transactions || [], state.categories || [])
+    const cashFlow = buildCashFlow(scopedTransactions, state.categories || [])
     const kpis = buildKpis({
       accounts: state.accounts || [],
-      transactions: state.transactions || [],
+      transactions: scopedTransactions,
       budgetTotal,
       spentTotal,
       plannedTotal,
@@ -95,6 +101,6 @@ export function useDerivedData(state, activeCycleId, viewMode = 'cycle') {
     state.transactions,
     state.planningCosts,
     activeCycleId,
-    viewMode,
+    selectedCycleId,
   ])
 }

@@ -1,3 +1,27 @@
+/**
+ * Resolves a selectedCycleId sentinel ('current' | 'all' | explicit id)
+ * into a concrete scopedCycleId (null means "all cycles").
+ */
+export function resolveCycleId(selectedCycleId, activeCycleId) {
+  const scopedCycleId =
+    selectedCycleId === 'current'
+      ? activeCycleId
+      : selectedCycleId === 'all'
+        ? null
+        : selectedCycleId
+  const isAllView = scopedCycleId === null
+  const matchesCycle = (cycleId) => isAllView || cycleId === scopedCycleId
+  return { scopedCycleId, isAllView, matchesCycle }
+}
+
+export function formatCycleLabel(cycleId) {
+  if (!cycleId) return 'Current Month'
+  const parsed = parseCycleId(cycleId)
+  if (!parsed) return cycleId
+  const date = new Date(parsed.year, parsed.monthIndex, 1)
+  return date.toLocaleString('en-US', { month: 'long', year: 'numeric' })
+}
+
 export function deriveCycleId(dateValue) {
   const date = toDate(dateValue) || new Date()
   const year = date.getFullYear()

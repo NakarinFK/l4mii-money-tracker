@@ -82,6 +82,22 @@ export function layoutReducer(
         ),
       }
     }
+    case 'SET_ACCENT_COLOR': {
+      const { id, color } = action.payload
+      return {
+        ...state,
+        items: state.items.map((item) =>
+          item.id === id ? { ...item, accentColor: color || undefined } : item
+        ),
+      }
+    }
+    case 'SET_ACCENT_COLOR_ALL': {
+      const { color } = action.payload
+      return {
+        ...state,
+        items: state.items.map((item) => ({ ...item, accentColor: color || undefined })),
+      }
+    }
     default:
       return state
   }
@@ -158,6 +174,7 @@ function normalizeItem(item: any): LayoutItem {
     hidden: isItemHidden(item),
     locked: Boolean(item?.locked),
     collapsed: Boolean(item?.collapsed),
+    accentColor: typeof item?.accentColor === 'string' ? item.accentColor : undefined,
   }
 }
 

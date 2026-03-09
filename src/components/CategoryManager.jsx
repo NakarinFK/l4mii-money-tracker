@@ -113,7 +113,7 @@ export default function CategoryManager({
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="p-4">
       <SectionHeader
         title="Categories"
         subtitle="Manage categories and usage"
@@ -126,7 +126,7 @@ export default function CategoryManager({
           return (
             <div
               key={category.id}
-              className={`rounded-xl border border-slate-200 p-3 ${
+              className={`rounded-xl border border-gray-200 dark:border-[#212631] p-3 ${
                 isActive ? '' : 'opacity-60'
               }`}
             >
@@ -142,7 +142,7 @@ export default function CategoryManager({
                             value: event.target.value,
                           })
                         }
-                        className="w-48 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                        className="w-48 rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-sm text-gray-700 dark:text-zinc-300"
                       />
                       <select
                         value={state.draftType}
@@ -152,7 +152,7 @@ export default function CategoryManager({
                             value: event.target.value,
                           })
                         }
-                        className="w-48 rounded-md border border-slate-200 px-2 py-1 text-xs text-slate-700"
+                        className="w-48 rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-xs text-gray-700 dark:text-zinc-300"
                         required
                       >
                         <option value="expense">Expense</option>
@@ -160,15 +160,15 @@ export default function CategoryManager({
                       </select>
                     </div>
                   ) : (
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-zinc-50">
                       {category.name}
                     </p>
                   )}
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-gray-500 dark:text-zinc-400">
                     {counts.get(category.id) || 0} transactions
                   </p>
                   {!isEditing ? (
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-gray-500 dark:text-zinc-400">
                       Type: {categoryType}
                     </p>
                   ) : null}
@@ -179,14 +179,14 @@ export default function CategoryManager({
                       <button
                         type="button"
                         onClick={handleSave}
-                        className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                        className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"
                       >
                         Save
                       </button>
                       <button
                         type="button"
                         onClick={() => dispatchLocal({ type: 'CANCEL' })}
-                        className="text-xs font-semibold text-slate-500 hover:text-slate-700"
+                        className="text-xs font-semibold text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200"
                       >
                         Cancel
                       </button>
@@ -203,14 +203,14 @@ export default function CategoryManager({
                             categoryType,
                           })
                         }
-                        className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                        className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"
                       >
                         Rename
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDelete(category)}
-                        className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                        className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"
                       >
                         Delete
                       </button>

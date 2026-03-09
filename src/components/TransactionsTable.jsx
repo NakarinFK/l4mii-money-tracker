@@ -61,19 +61,19 @@ export default function TransactionsTable({ rows, onEdit, onDelete }) {
   const handleSort = (key) => dispatch({ type: 'TOGGLE', key })
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <SectionHeader
           title="Recent Expenses"
           subtitle={`Sortable table for quick review${selectedCategory !== 'all' ? ` (${visibleRows.length} filtered)` : ''}`}
         />
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <label className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
             <span>Category:</span>
             <select
               value={selectedCategory}
               onChange={(event) => setSelectedCategory(event.target.value)}
-              className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-600 min-w-[120px]"
+              className="rounded-md border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-2 py-1 text-xs font-semibold text-gray-600 dark:text-zinc-400 min-w-[120px]"
             >
               <option value="all">All Categories</option>
               {categories.map((category) => (
@@ -83,14 +83,14 @@ export default function TransactionsTable({ rows, onEdit, onDelete }) {
               ))}
             </select>
           </label>
-          <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <label className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
             <span>Show</span>
             <select
               value={recentExpensesLimit}
               onChange={(event) =>
                 setRecentExpensesLimit(Number(event.target.value))
               }
-              className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-600"
+              className="rounded-md border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-2 py-1 text-xs font-semibold text-gray-600 dark:text-zinc-400"
             >
               {[10, 20, 30, 50].map((value) => (
                 <option key={value} value={value}>
@@ -103,7 +103,7 @@ export default function TransactionsTable({ rows, onEdit, onDelete }) {
       </div>
       <div className="mt-4 overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+          <thead className="border-b border-gray-200 dark:border-[#212631] text-xs uppercase tracking-wide text-gray-500 dark:text-zinc-400">
             <tr>
               {columns.map((column) => (
                 <th
@@ -121,7 +121,7 @@ export default function TransactionsTable({ rows, onEdit, onDelete }) {
                   >
                     <span>{column.label}</span>
                     {sort.key === column.key ? (
-                      <span className="text-slate-400">
+                      <span className="text-gray-400 dark:text-zinc-500">
                         {sort.direction === 'asc' ? '^' : 'v'}
                       </span>
                     ) : null}
@@ -133,9 +133,9 @@ export default function TransactionsTable({ rows, onEdit, onDelete }) {
               ) : null}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-[#212631]">
             {visibleRows.map((row) => (
-              <tr key={row.id} className="text-slate-700">
+              <tr key={row.id} className="text-gray-700 dark:text-zinc-300">
                 <td className="py-3 pr-4">{row.transaction}</td>
                 <td className="py-3 pr-4 text-right">
                   {formatCurrency(row.amount)}
@@ -160,7 +160,7 @@ export default function TransactionsTable({ rows, onEdit, onDelete }) {
                         <button
                           type="button"
                           onClick={() => onEdit(row.id)}
-                          className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                          className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"
                         >
                           Edit
                         </button>

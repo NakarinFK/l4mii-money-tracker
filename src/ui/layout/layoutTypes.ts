@@ -26,6 +26,7 @@ export type LayoutItem = {
   locked?: boolean
   visible?: boolean
   collapsed?: boolean
+  accentColor?: string
 }
 
 export type LayoutState = {
@@ -81,4 +82,12 @@ export type LayoutAction =
       payload: {
         id: BlockId
       }
+    }
+  | {
+      type: 'SET_ACCENT_COLOR'
+      payload: { id: BlockId; color: string | undefined }
+    }
+  | {
+      type: 'SET_ACCENT_COLOR_ALL'
+      payload: { color: string | undefined }
     }

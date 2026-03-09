@@ -45,24 +45,24 @@ export default function AddAccountForm({ dispatch }) {
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="p-4">
       <SectionHeader
         title="Add Account"
         subtitle="Create a new account for tracking"
       />
       <form className="mt-4 grid gap-4 sm:grid-cols-2" onSubmit={handleSubmit}>
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Account Name
           <input
             name="name"
             value={formState.name}
             onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             placeholder="e.g. Savings"
             required
           />
         </label>
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Opening Balance
           <input
             name="balance"
@@ -70,14 +70,14 @@ export default function AddAccountForm({ dispatch }) {
             step="0.01"
             value={formState.balance}
             onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             placeholder="Optional"
           />
         </label>
         <div className="sm:col-span-2 flex items-center justify-end">
           <button
             type="submit"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+            className="rounded-lg bg-zinc-900 dark:bg-zinc-50 px-4 py-2 text-sm font-semibold text-white dark:text-zinc-900"
           >
             Add Account
           </button>

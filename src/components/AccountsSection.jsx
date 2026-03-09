@@ -44,7 +44,7 @@ export default function AccountsSection({
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="p-4">
       <SectionHeader
         title="Accounts"
         subtitle="Current balances and recent movement"
@@ -53,15 +53,15 @@ export default function AccountsSection({
         {accounts.map((account) => (
           <div
             key={account.id ?? account.name}
-            className="rounded-xl border border-slate-200 p-4"
+            className="rounded-xl border border-gray-200 p-4 dark:border-[#212631]"
           >
-            <p className="text-sm font-semibold text-slate-900">
+            <p className="text-sm font-semibold text-gray-900 dark:text-zinc-50">
               {account.name}
             </p>
-            <p className="mt-3 text-lg font-semibold text-slate-900">
+            <p className="mt-3 text-lg font-semibold text-gray-900 dark:text-zinc-50">
               {formatCurrency(account.balance)}
             </p>
-            <div className="mt-3 space-y-1 text-xs text-slate-500">
+            <div className="mt-3 space-y-1 text-xs text-gray-500 dark:text-zinc-400">
               <div className="flex items-center justify-between">
                 <span>Income</span>
                 <span>{formatCurrency(account.income)}</span>
@@ -72,7 +72,7 @@ export default function AccountsSection({
               </div>
             </div>
             {editState.editingId === account.id ? (
-              <div className="mt-4 space-y-2 text-xs text-slate-600">
+              <div className="mt-4 space-y-2 text-xs text-gray-600 dark:text-zinc-400">
                 <p>Opening balance (per cycle, does not change transactions)</p>
                 <input
                   type="number"
@@ -84,20 +84,20 @@ export default function AccountsSection({
                       value: event.target.value,
                     })
                   }
-                  className="w-full rounded-md border border-slate-200 px-2 py-1 text-xs text-slate-700"
+                  className="w-full rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-xs text-gray-700 dark:text-zinc-300"
                 />
                 <div className="flex items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => handleSave(account.id)}
-                    className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                    className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:text-zinc-50"
                   >
                     Save
                   </button>
                   <button
                     type="button"
                     onClick={() => dispatchEdit({ type: 'CLEAR' })}
-                    className="text-xs font-semibold text-slate-500 hover:text-slate-700"
+                    className="text-xs font-semibold text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:text-zinc-300"
                   >
                     Cancel
                   </button>
@@ -110,14 +110,14 @@ export default function AccountsSection({
                   <button
                     type="button"
                     onClick={() => handleStartEdit(account)}
-                    className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                    className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:text-zinc-50"
                   >
                     Edit
                   </button>
                   <button
                     type="button"
                     onClick={() => onSelect(account.id)}
-                    className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                    className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:text-zinc-50"
                   >
                     {selectedAccountId === account.id ? 'Viewing' : 'View'}
                   </button>

@@ -14,18 +14,18 @@ export default function SelectedAccountBanner({
   if (!selectedAccountId) return null
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
+    <div className="rounded-xl border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] p-4 text-sm text-gray-600 dark:text-zinc-400">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span>
           Viewing transactions for{' '}
-          <span className="font-semibold text-slate-900">
+          <span className="font-semibold text-gray-900 dark:text-zinc-50">
             {selectedAccountName || 'Selected Account'}
           </span>
         </span>
         <button
           type="button"
           onClick={onClearSelection}
-          className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+          className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"
         >
           Clear
         </button>

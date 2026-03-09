@@ -296,19 +296,19 @@ export default function TransactionForm({
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="p-4">
       <SectionHeader
         title={editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
         subtitle="Log income, expense, or transfers"
       />
       <form className="mt-4 grid gap-4 sm:grid-cols-2" onSubmit={handleSubmit}>
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Type
           <select
             name="type"
             value={formState.type}
             onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
           >
             <option value="expense">Expense</option>
             <option value="income">Income</option>
@@ -316,7 +316,7 @@ export default function TransactionForm({
           </select>
         </label>
 
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Amount
           <input
             name="amount"
@@ -325,7 +325,7 @@ export default function TransactionForm({
             step="0.01"
             value={formState.amount}
             onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             required
           />
           {errors.amount ? (
@@ -336,13 +336,13 @@ export default function TransactionForm({
         </label>
 
         {showFromAccount ? (
-          <label className="text-xs font-medium text-slate-600">
+          <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
             From Account
             <select
               name="fromAccount"
               value={formState.fromAccount}
               onChange={handleChange}
-              className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+              className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
               required={formState.type !== 'income'}
             >
               <option value="">Select account</option>
@@ -361,13 +361,13 @@ export default function TransactionForm({
         ) : null}
 
         {showToAccount ? (
-          <label className="text-xs font-medium text-slate-600">
+          <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
             To Account
             <select
               name="toAccount"
               value={formState.toAccount}
               onChange={handleChange}
-              className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+              className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
               required={formState.type !== 'expense'}
             >
               <option value="">Select account</option>
@@ -386,13 +386,13 @@ export default function TransactionForm({
         ) : null}
 
         {requiresCategory ? (
-          <label className="text-xs font-medium text-slate-600">
+          <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
             Category
             <select
               name="categoryId"
               value={categorySelectValue}
               onChange={handleChange}
-              className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+              className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
               required={requiresCategory}
             >
               <option value="">Select category</option>
@@ -422,7 +422,7 @@ export default function TransactionForm({
                     value: !formState.isAddingCategory,
                   })
                 }
-                className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"
               >
                 + Add Category
               </button>
@@ -433,14 +433,14 @@ export default function TransactionForm({
                   name="newCategoryName"
                   value={formState.newCategoryName}
                   onChange={handleChange}
-                  className="flex-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-700"
+                  className="flex-1 rounded-md border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-2 py-1 text-xs text-gray-700 dark:text-zinc-300"
                   placeholder="New category name"
                 />
                 <select
                   name="newCategoryType"
                   value={formState.newCategoryType}
                   onChange={handleChange}
-                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-700"
+                  className="rounded-md border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-2 py-1 text-xs text-gray-700 dark:text-zinc-300"
                   required
                 >
                   <option value="expense">Expense</option>
@@ -449,7 +449,7 @@ export default function TransactionForm({
                 <button
                   type="button"
                   onClick={handleAddCategory}
-                  className="rounded-md border border-slate-200 px-2 py-1 text-xs font-semibold text-slate-600"
+                  className="rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-xs font-semibold text-gray-600 dark:text-zinc-400"
                 >
                   Add
                 </button>
@@ -458,25 +458,25 @@ export default function TransactionForm({
           </label>
         ) : null}
 
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Date
           <input
             name="date"
             type="date"
             value={formState.date}
             onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             required
           />
         </label>
 
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Billing Cycle
           <select
             name="cycleId"
             value={formState.cycleId}
             onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
           >
             {cycleSelectOptions.map((cycleId) => (
               <option key={cycleId} value={cycleId}>
@@ -486,13 +486,13 @@ export default function TransactionForm({
           </select>
         </label>
 
-        <label className="text-xs font-medium text-slate-600 sm:col-span-2">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400 sm:col-span-2">
           Note
           <input
             name="note"
             value={formState.note}
             onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             placeholder="Optional details"
           />
         </label>
@@ -507,7 +507,7 @@ export default function TransactionForm({
             <button
               type="button"
               onClick={onCancel}
-              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600"
+              className="rounded-lg border border-gray-200 dark:border-[#212631] px-4 py-2 text-sm font-semibold text-gray-600 dark:text-zinc-400"
             >
               Cancel
             </button>
@@ -515,7 +515,7 @@ export default function TransactionForm({
           <button
             type="submit"
             disabled={Object.keys(errors).length > 0}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+            className="rounded-lg bg-zinc-900 dark:bg-zinc-50 px-4 py-2 text-sm font-semibold text-white dark:text-zinc-900"
           >
             {editingTransaction ? 'Update Transaction' : 'Add Transaction'}
           </button>

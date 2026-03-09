@@ -140,7 +140,7 @@ export default function PlanningCostSection({
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="p-4">
       <SectionHeader
         title="Planning Cost"
         subtitle={
@@ -151,7 +151,7 @@ export default function PlanningCostSection({
       />
 
       <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={handleAdd}>
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Name
           <input
             value={state.add.name}
@@ -162,11 +162,11 @@ export default function PlanningCostSection({
                 value: event.target.value,
               })
             }
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             required
           />
         </label>
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Amount
           <input
             type="number"
@@ -179,11 +179,11 @@ export default function PlanningCostSection({
                 value: event.target.value,
               })
             }
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             required
           />
         </label>
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Category
           <select
             value={state.add.categoryId}
@@ -194,7 +194,7 @@ export default function PlanningCostSection({
                 value: event.target.value,
               })
             }
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             required
           >
             <option value="">Select category</option>
@@ -205,7 +205,7 @@ export default function PlanningCostSection({
             ))}
           </select>
         </label>
-        <label className="text-xs font-medium text-slate-600">
+        <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
           Billing Day
           <input
             type="number"
@@ -219,7 +219,7 @@ export default function PlanningCostSection({
                 value: event.target.value,
               })
             }
-            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-200 dark:border-[#212631] bg-white dark:bg-[#0A0E15] px-3 py-2 text-sm text-gray-700 dark:text-zinc-300"
             placeholder="e.g. 5"
             required
           />
@@ -227,7 +227,7 @@ export default function PlanningCostSection({
         <div className="sm:col-span-2 flex items-center justify-end">
           <button
             type="submit"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+            className="rounded-lg bg-zinc-900 dark:bg-zinc-50 px-4 py-2 text-sm font-semibold text-white dark:text-zinc-900"
           >
             Add Planning Cost
           </button>
@@ -245,22 +245,22 @@ export default function PlanningCostSection({
           return (
             <div
               key={item.id}
-              className={`rounded-xl border border-slate-200 p-4 ${
+              className={`rounded-xl border border-gray-200 dark:border-[#212631] p-4 ${
                 isInactive ? 'opacity-60' : ''
               }`}
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-zinc-50">
                     {item.name}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-gray-500 dark:text-zinc-400">
                     {formatCurrency(item.amount)} ·{' '}
                     {category?.name || 'Uncategorized'} · Every {item.billingDay}
                     th {item.cycleId !== scopedCycleId ? `· Cycle ${item.cycleId}` : ''}
                   </p>
                 </div>
-                <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-semibold text-slate-600">
+                <span className="rounded-full bg-gray-100 dark:bg-zinc-800 px-2 py-1 text-[10px] font-semibold text-gray-600 dark:text-zinc-400">
                   {statusLabel}
                 </span>
               </div>
@@ -276,7 +276,7 @@ export default function PlanningCostSection({
                         value: event.target.value,
                       })
                     }
-                    className="w-full rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                    className="w-full rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-sm text-gray-700 dark:text-zinc-300"
                   />
                   <input
                     type="number"
@@ -289,7 +289,7 @@ export default function PlanningCostSection({
                         value: event.target.value,
                       })
                     }
-                    className="w-full rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                    className="w-full rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-sm text-gray-700 dark:text-zinc-300"
                   />
                   <select
                     value={state.edit.categoryId}
@@ -300,7 +300,7 @@ export default function PlanningCostSection({
                         value: event.target.value,
                       })
                     }
-                    className="w-full rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                    className="w-full rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-sm text-gray-700 dark:text-zinc-300"
                   >
                     {activeCategories.map((category) => (
                       <option key={category.id} value={category.id}>
@@ -320,20 +320,20 @@ export default function PlanningCostSection({
                         value: event.target.value,
                       })
                     }
-                    className="w-full rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                    className="w-full rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-sm text-gray-700 dark:text-zinc-300"
                   />
                   <div className="sm:col-span-2 flex items-center justify-end gap-2">
                     <button
                       type="button"
                       onClick={() => handleSaveEdit(item.id)}
-                      className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                      className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"
                     >
                       Save
                     </button>
                     <button
                       type="button"
                       onClick={() => dispatchLocal({ type: 'CANCEL_EDIT' })}
-                      className="text-xs font-semibold text-slate-500 hover:text-slate-700"
+                      className="text-xs font-semibold text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200"
                     >
                       Cancel
                     </button>
@@ -343,7 +343,7 @@ export default function PlanningCostSection({
 
               {isPaying ? (
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  <label className="text-xs font-medium text-slate-600">
+                  <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
                     Pay from
                     <select
                       value={state.pay.accountId}
@@ -354,7 +354,7 @@ export default function PlanningCostSection({
                           value: event.target.value,
                         })
                       }
-                      className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                      className="mt-1 w-full rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-sm text-gray-700 dark:text-zinc-300"
                     >
                       <option value="">Select account</option>
                       {accounts.map((account) => (
@@ -364,7 +364,7 @@ export default function PlanningCostSection({
                       ))}
                     </select>
                   </label>
-                  <label className="text-xs font-medium text-slate-600">
+                  <label className="text-xs font-medium text-gray-600 dark:text-zinc-400">
                     Date
                     <input
                       type="date"
@@ -376,21 +376,21 @@ export default function PlanningCostSection({
                           value: event.target.value,
                         })
                       }
-                      className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                      className="mt-1 w-full rounded-md border border-gray-200 dark:border-[#212631] px-2 py-1 text-sm text-gray-700 dark:text-zinc-300"
                     />
                   </label>
                   <div className="sm:col-span-2 flex items-center justify-end gap-2">
                     <button
                       type="button"
                       onClick={() => handlePay(item.id)}
-                      className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                      className="text-xs font-semibold text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"
                     >
                       Confirm
                     </button>
                     <button
                       type="button"
                       onClick={() => dispatchLocal({ type: 'CANCEL_PAY' })}
-                      className="text-xs font-semibold text-slate-500 hover:text-slate-700"
+                      className="text-xs font-semibold text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200"
                     >
                       Cancel
                     </button>
@@ -399,7 +399,7 @@ export default function PlanningCostSection({
               ) : null}
 
               {!isEditing && !isPaying ? (
-                <div className="mt-3 flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-600">
+                <div className="mt-3 flex flex-wrap items-center gap-3 text-xs font-semibold text-gray-600 dark:text-zinc-400">
                   <button
                     type="button"
                     onClick={() =>
@@ -412,7 +412,7 @@ export default function PlanningCostSection({
                         billingDay: item.billingDay,
                       })
                     }
-                    className="hover:text-slate-900"
+                    className="hover:text-gray-900 dark:hover:text-white"
                   >
                     Edit
                   </button>
@@ -427,7 +427,7 @@ export default function PlanningCostSection({
                         },
                       })
                     }
-                    className="hover:text-slate-900"
+                    className="hover:text-gray-900 dark:hover:text-white"
                   >
                     {isInactive ? 'Activate' : 'Set Inactive'}
                   </button>
@@ -440,7 +440,7 @@ export default function PlanningCostSection({
                           payload: { id: item.id, status: 'done' },
                         })
                       }
-                      className="hover:text-slate-900"
+                      className="hover:text-gray-900 dark:hover:text-white"
                     >
                       Mark Done
                     </button>
@@ -455,7 +455,7 @@ export default function PlanningCostSection({
                           date: new Date().toISOString().slice(0, 10),
                         })
                       }
-                      className="hover:text-slate-900"
+                      className="hover:text-gray-900 dark:hover:text-white"
                     >
                       Pay Now
                     </button>
@@ -478,7 +478,7 @@ export default function PlanningCostSection({
           )
         })}
         {items.length === 0 ? (
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-gray-500 dark:text-zinc-400">
             {isAllView
               ? 'No planning costs in history yet.'
               : 'No planned costs for this cycle yet.'}

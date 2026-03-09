@@ -16,7 +16,19 @@ import { BLOCK_CATALOG } from '../blocks/blockCatalog'
 import type { BlockContext, BlockDefinition } from '../blocks/blockCatalog'
 import type { BlockId } from '../blocks/blockCatalog'
 import type { LayoutItem, LayoutState } from './layoutTypes'
-import { useTheme } from '../theme/useTheme'
+import { GripVertical, ChevronDown, MoreVertical } from 'lucide-react'
+
+const ACCENT_COLORS = [
+  { label: 'Purple 60', value: '#8a3ffc' },
+  { label: 'Blue 50',   value: '#4589ff' },
+  { label: 'Teal 70',   value: '#08bdba' },
+  { label: 'Teal 60',   value: '#007d79' },
+  { label: 'Green 30',  value: '#6fdc8c' },
+  { label: 'Cyan 20',   value: '#bae6ff' },
+  { label: 'Magenta 40',value: '#ff7eb6' },
+  { label: 'Purple 30', value: '#d4bbff' },
+  { label: 'Red 10',    value: '#fff1f1' },
+]
 
 type Props = {
   layoutState: LayoutState
@@ -26,6 +38,7 @@ type Props = {
   onToggleVisibility: (id: BlockId) => void
   onResetLayout: () => void
   onToggleCollapse: (id: BlockId) => void
+  onSetAccentColor: (id: BlockId | null, color: string | undefined) => void
 }
 
 type DragState = {
@@ -61,8 +74,8 @@ export default function FreeGridLayout({
   onToggleVisibility,
   onResetLayout,
   onToggleCollapse,
+  onSetAccentColor,
 }: Props) {
-  const { theme, toggleTheme } = useTheme()
   const [isLayoutLocked, setIsLayoutLocked] = useState(false)
   const [activeId, setActiveId] = useState<BlockId | null>(null)
   const [dragState, setDragState] = useState<DragState | null>(null)
@@ -250,84 +263,50 @@ export default function FreeGridLayout({
   }, [resizeState, resizePreview, items, grid, cellWidth, cellHeight, onMoveItem, onResizeItem])
 
   return (
-    <div className="space-y-5">
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '8px',
-          padding: '8px 12px',
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: '8px',
-          boxShadow: 'var(--card-shadow)',
-        }}
-      >
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '6px', fontSize: '13px' }}>
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-gray-200 bg-white p-3 dark:border-[#212631] dark:bg-[#0A0E15]">
+        <div className="flex flex-wrap items-center gap-1.5 text-[13px]">
           {hiddenItems.length ? (
             <>
-              <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Hidden:</span>
+              <span className="font-medium text-gray-500 dark:text-gray-400">Hidden:</span>
               {hiddenItems.map((item) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => onToggleVisibility(item.id)}
-                  className="card-action-btn"
-                  style={{
-                    width: 'auto',
-                    height: '24px',
-                    padding: '0 8px',
-                    fontSize: '12px',
-                    color: 'var(--accent)',
-                    background: 'var(--accent-light)',
-                  }}
+                  className="rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20"
                 >
                   {getBlockLabel(item.id)}
                 </button>
               ))}
             </>
           ) : (
-            <span style={{ color: 'var(--text-disabled)', fontSize: '12px' }}>
+            <span className="text-xs text-gray-400 dark:text-gray-500">
               All blocks visible · Grid {grid.cols}x{grid.rows}
             </span>
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => {
               if (window.confirm('Reset grid layout to default?')) onResetLayout()
             }}
-            className="card-action-btn"
-            style={{ width: 'auto', height: '28px', padding: '0 8px', fontSize: '12px' }}
+            className="rounded-lg px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-[#212631] dark:hover:text-gray-200"
           >
             Reset Grid
           </button>
           <button
             type="button"
             onClick={() => setIsLayoutLocked((prev) => !prev)}
-            className="card-action-btn"
-            style={{
-              width: 'auto',
-              height: '28px',
-              padding: '0 8px',
-              fontSize: '12px',
-              color: isLayoutLocked ? 'var(--accent)' : 'var(--text-muted)',
-              background: isLayoutLocked ? 'var(--accent-light)' : 'transparent',
-            }}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              isLayoutLocked
+                ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-[#212631]'
+            }`}
           >
             {isLayoutLocked ? 'Locked' : 'Lock'}
-          </button>
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="card-action-btn"
-            style={{ width: 'auto', height: '28px', padding: '0 8px', fontSize: '12px' }}
-          >
-            {theme === 'dark' ? 'Light' : 'Dark'}
           </button>
         </div>
       </div>
@@ -346,11 +325,16 @@ export default function FreeGridLayout({
             minHeight: grid.rows * cellHeight,
             borderRadius: 10,
             border: '1px solid var(--border)',
-            backgroundColor: 'var(--surface)',
+            background: 'var(--grid-bg, var(--surface))',
             backgroundImage: isLayoutLocked
-              ? 'none'
-              : 'linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)',
-            backgroundSize: `${cellWidth}px ${cellHeight}px`,
+              ? 'var(--grid-gradient, none)'
+              : [
+                  'var(--grid-gradient, none)',
+                  'radial-gradient(circle, var(--border) 1.5px, transparent 1.5px)',
+                ].filter(Boolean).join(', '),
+            backgroundSize: isLayoutLocked
+              ? 'auto'
+              : `auto, ${cellWidth}px ${cellHeight}px`,
             overflow: 'hidden',
           }}
         >
@@ -378,6 +362,7 @@ export default function FreeGridLayout({
                 onToggleVisibility={onToggleVisibility}
                 onResizeStart={handleResizeStart}
                 onToggleCollapse={onToggleCollapse}
+                onSetAccentColor={onSetAccentColor}
               />
             )
           })}
@@ -405,6 +390,7 @@ function GridCard({
   onToggleVisibility,
   onResizeStart,
   onToggleCollapse,
+  onSetAccentColor,
 }: {
   item: LayoutItem
   x: number
@@ -423,6 +409,7 @@ function GridCard({
     edge: ResizeEdge
   ) => void
   onToggleCollapse: (id: BlockId) => void
+  onSetAccentColor: (id: BlockId | null, color: string | undefined) => void
 }) {
   const definition: BlockDefinition | undefined = BLOCK_CATALOG[item.id]
   const { attributes, listeners, setNodeRef } = useDraggable({
@@ -435,6 +422,11 @@ function GridCard({
 
   const Component = definition.Component
   const props = definition.getProps(blockContext)
+
+  // Scale content to fit card width instead of clipping/scrolling
+  const NATURAL_CONTENT_WIDTH = 300
+  const cardBodyPixelWidth = w * cellWidth - 12 // 6px padding each side
+  const contentScale = Math.min(1, cardBodyPixelWidth / NATURAL_CONTENT_WIDTH)
 
   return (
     <div
@@ -451,7 +443,16 @@ function GridCard({
         transition: isActive ? 'none' : 'left 120ms ease, top 120ms ease',
       }}
     >
-      <div className="notion-card" style={{ position: 'relative', height: '100%', overflow: 'hidden' }}>
+      <div
+        className="notion-card"
+        data-accent={item.accentColor ? 'true' : undefined}
+        style={{
+          position: 'relative',
+          height: '100%',
+          overflow: 'hidden',
+          ...(item.accentColor ? { '--card-accent': item.accentColor } as React.CSSProperties : {}),
+        }}
+      >
         <div className="notion-card-header">
           <button
             type="button"
@@ -460,14 +461,7 @@ function GridCard({
             className="drag-handle"
             title="Drag card"
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="var(--drag-handle)">
-              <circle cx="4" cy="3" r="1.2" />
-              <circle cx="10" cy="3" r="1.2" />
-              <circle cx="4" cy="7" r="1.2" />
-              <circle cx="10" cy="7" r="1.2" />
-              <circle cx="4" cy="11" r="1.2" />
-              <circle cx="10" cy="11" r="1.2" />
-            </svg>
+            <GripVertical size={14} />
           </button>
 
           <span className="card-title">{definition.label}</span>
@@ -479,28 +473,28 @@ function GridCard({
               onClick={() => onToggleCollapse(item.id)}
               title={item.collapsed ? 'Expand' : 'Collapse'}
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                style={{ transform: item.collapsed ? 'rotate(-90deg)' : 'none' }}
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
+              <ChevronDown
+                size={14}
+                style={{ transform: item.collapsed ? 'rotate(-90deg)' : 'none', transition: 'transform 0.15s' }}
+              />
             </button>
             <CardSizeMenu
               item={item}
               onHide={onToggleVisibility}
+              onSetAccentColor={onSetAccentColor}
             />
           </div>
         </div>
 
         {!item.collapsed ? (
-          <div className="notion-card-body" style={{ height: 'calc(100% - 40px)', overflow: 'auto' }}>
-            <Component {...props} />
+          <div className="notion-card-body" style={{ height: 'calc(100% - 40px)', overflow: 'hidden' }}>
+            <div style={{
+              width: contentScale < 1 ? `${100 / contentScale}%` : '100%',
+              transformOrigin: 'top left',
+              transform: contentScale < 1 ? `scale(${contentScale})` : undefined,
+            }}>
+              <Component {...props} />
+            </div>
           </div>
         ) : null}
 
@@ -558,9 +552,11 @@ function GridCard({
 function CardSizeMenu({
   item,
   onHide,
+  onSetAccentColor,
 }: {
   item: LayoutItem
   onHide: (id: BlockId) => void
+  onSetAccentColor: (id: BlockId | null, color: string | undefined) => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -594,21 +590,62 @@ function CardSizeMenu({
         onPointerDown={(event) => event.stopPropagation()}
         title="Card options"
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <circle cx="12" cy="5" r="2" />
-          <circle cx="12" cy="12" r="2" />
-          <circle cx="12" cy="19" r="2" />
-        </svg>
+        <MoreVertical size={14} />
       </button>
 
       {isOpen ? (
-        <div className="notion-menu">
+        <div className="notion-menu" style={{ minWidth: 220 }}>
+          <div className="notion-menu-label">Title Color</div>
+          <div style={{ padding: '6px 12px 8px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 6 }}>
+              {/* None swatch */}
+              <button
+                type="button"
+                title="None"
+                onClick={() => { onSetAccentColor(item.id, undefined); setIsOpen(false) }}
+                style={{
+                  width: 28, height: 28, borderRadius: 6, cursor: 'pointer',
+                  border: item.accentColor ? '2px solid var(--border)' : '2px solid var(--text)',
+                  background: 'var(--surface-muted)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 10, color: 'var(--text-muted)',
+                }}
+              >
+                ✕
+              </button>
+              {ACCENT_COLORS.map((c) => (
+                <button
+                  key={c.value}
+                  type="button"
+                  title={c.label}
+                  onClick={() => { onSetAccentColor(item.id, c.value); setIsOpen(false) }}
+                  style={{
+                    width: 28, height: 28, borderRadius: 6, cursor: 'pointer',
+                    background: c.value,
+                    border: item.accentColor === c.value
+                      ? '2px solid var(--text)'
+                      : '2px solid transparent',
+                    outline: item.accentColor === c.value ? '1px solid var(--border)' : 'none',
+                  }}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => { onSetAccentColor(null, item.accentColor); setIsOpen(false) }}
+              style={{
+                marginTop: 8, width: '100%', padding: '4px 0',
+                fontSize: 11, color: 'var(--text-muted)', cursor: 'pointer',
+                background: 'transparent', border: 'none', textAlign: 'center',
+              }}
+            >
+              Apply to all cards
+            </button>
+          </div>
+          <div className="notion-menu-divider" />
           <div className="notion-menu-label">Size</div>
           <div className="notion-menu-item" style={{ cursor: 'default' }}>
-            <span className="menu-label">Current: {currentKey}</span>
-          </div>
-          <div className="notion-menu-item" style={{ cursor: 'default' }}>
-            <span className="menu-label">Drag right / bottom edge to resize</span>
+            <span className="menu-label">Current: {currentKey} · drag edges to resize</span>
           </div>
           <div className="notion-menu-divider" />
           <button
@@ -686,8 +723,8 @@ function clamp(value: number, min: number, max: number) {
 function GhostCard({ id }: { id: BlockId }) {
   return (
     <div style={{ pointerEvents: 'none' }}>
-      <div className="notion-card notion-card-dragging" style={{ width: 240, padding: '10px 14px', opacity: 0.85 }}>
-        <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+      <div className="rounded-xl border-2 border-blue-500 bg-white px-4 py-2.5 shadow-lg dark:bg-[#0A0E15] dark:shadow-none" style={{ width: 240, opacity: 0.9 }}>
+        <span className="text-sm font-semibold text-gray-900 dark:text-zinc-50">
           {getBlockLabel(id)}
         </span>
       </div>

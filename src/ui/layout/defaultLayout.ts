@@ -13,6 +13,5 @@ export const DEFAULT_LAYOUT: LayoutState = {
     { id: 'planning-costs',    x: 16, y: 20, w: 4,  h: 25, hidden: false },
     { id: 'category-manager',  x: 20, y: 20, w: 4,  h: 25, hidden: false },
     { id: 'add-account',       x: 0,  y: 27, w: 5,  h: 6,  hidden: false },
-    { id: 'account-selection', x: 0,  y: 16, w: 8,  h: 3,  hidden: true  },
   ],
 }

@@ -7,8 +7,6 @@ import CategoryManager from '../../components/CategoryManager.jsx'
 import PlanningCostSection from '../../components/PlanningCostSection.jsx'
 import TransactionsTable from '../../components/TransactionsTable.jsx'
 import TransactionForm from '../../components/TransactionForm.jsx'
-import SelectedAccountBanner from './SelectedAccountBanner.tsx'
-
 export type BlockId =
   | 'accounts'
   | 'add-account'
@@ -17,7 +15,6 @@ export type BlockId =
   | 'category-manager'
   | 'cash-flow'
   | 'transaction-form'
-  | 'account-selection'
   | 'transactions-table'
 
 export type BlockContext = {
@@ -132,16 +129,6 @@ export const BLOCK_CATALOG: Record<BlockId, BlockDefinition> = {
       onSubmit: context.onSubmitTransaction,
       onCancel: context.onCancelEdit,
       dispatch: context.dispatch,
-    }),
-  },
-  'account-selection': {
-    id: 'account-selection',
-    label: 'Selected Account',
-    Component: SelectedAccountBanner,
-    getProps: (context) => ({
-      selectedAccountId: context.selectedAccountId,
-      selectedAccountName: context.selectedAccountName,
-      onClearSelection: context.onClearSelection,
     }),
   },
   'transactions-table': {

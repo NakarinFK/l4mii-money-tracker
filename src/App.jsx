@@ -63,6 +63,8 @@ export default function App({ initialState, initialLayoutState }) {
   const activeCycleId = useMemo(() => getCurrentCycleId(), [])
   const derived = useDerivedData(state, activeCycleId, selectedCycleId)
 
+  const fileInputRef = useRef(null)
+
   const cycleOptions = useMemo(() => {
     const normalizeCycleId = (value) => {
       if (typeof value === 'string') {
@@ -105,8 +107,6 @@ export default function App({ initialState, initialLayoutState }) {
     if (!supabase) return
     await supabase.auth.signOut()
   }
-
-  const fileInputRef = useRef(null)
 
   const handleImportClick = () => {
     fileInputRef.current?.click()

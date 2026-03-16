@@ -64,11 +64,27 @@ export default function App({ initialState, initialLayoutState }) {
   const derived = useDerivedData(state, activeCycleId, selectedCycleId)
 
   const cycleOptions = useMemo(() => {
-    const options = new Set(buildCycleOptions(activeCycleId, 6))
-    for (const item of [...(state.planningCosts || []), ...(state.transactions || []), ...(state.budgets || [])]) {
-      if (item?.cycleId) options.add(item.cycleId)
+    const normalizeCycleId = (value) => {
+      if (typeof value === 'string') {
+        const trimmed = value.trim()
+        return trimmed || null
+      }
+      if (typeof value === 'number' && Number.isFinite(value)) {
+        return String(value)
+      }
+      return null
     }
-    return Array.from(options).sort((a, b) => b.localeCompare(a))
+
+    const options = new Set(buildCycleOptions(activeCycleId, 6))
+    for (const item of [
+      ...(state.planningCosts || []),
+      ...(state.transactions || []),
+      ...(state.budgets || []),
+    ]) {
+      const normalized = normalizeCycleId(item?.cycleId)
+      if (normalized) options.add(normalized)
+    }
+    return Array.from(options).sort((a, b) => String(b).localeCompare(String(a)))
   }, [activeCycleId, state.planningCosts, state.transactions, state.budgets])
 
   if (!authReady) {
@@ -142,7 +158,7 @@ export default function App({ initialState, initialLayoutState }) {
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = 'finance-dashboard-export.json'
+      link.download = 'l4mii-money-tracker-export.json'
       document.body.appendChild(link)
       link.click()
       link.remove()

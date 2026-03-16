@@ -55,7 +55,7 @@ export default function Sidebar({
             <Wallet className="h-4 w-4 text-white dark:text-zinc-900" />
           </div>
           <span className="text-lg font-semibold text-gray-900 dark:text-white">
-            Money Trackers
+            L4mii Money Tracker
           </span>
         </div>
       </div>

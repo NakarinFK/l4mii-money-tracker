@@ -18,7 +18,7 @@ export default function TopNav({ userEmail, onSignOut, onToggleSidebar }) {
 
         <div className="hidden items-center space-x-1 text-sm font-medium sm:flex">
           <span className="text-gray-700 dark:text-gray-300">
-            Money Trackers
+            L4mii Money Tracker
           </span>
           <ChevronRight className="mx-1 h-4 w-4 text-gray-400 dark:text-gray-500" />
           <span className="text-gray-900 dark:text-gray-100">Dashboard</span>
